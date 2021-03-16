@@ -71,12 +71,13 @@ def get_page(page_num):
     iscached =json_data.from_cache
     #
     json_data = json_data.json()
-    # if not (iscached):
-    #     timestamps.append(time)
-    #
-    # else:
-    #     #print(timestamps)
-    #     print('1')
+    if not (iscached):
+        timestamps.append(time)
+
+    else:
+        #print(timestamps)
+        timestamps.append(time)
+        print('1')
 
 
 
@@ -154,7 +155,7 @@ if __name__ == '__main__':
     #while(1):
     search_for_people()
 
-    requests_cache.clear()
+    #requests_cache.clear()
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
 
 
