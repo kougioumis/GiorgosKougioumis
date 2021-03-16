@@ -2,7 +2,7 @@
 import json
 
 import requests
-import sys
+
 import requests
 import requests_cache
 import urllib.parse
@@ -13,7 +13,7 @@ import get_home_world
 import timedelta
 import os
 import sqlite3
-
+import sys  #############################################################
 
 import sqlite3
 from sqlite3 import Error
@@ -69,14 +69,14 @@ def get_page(page_num):
 
     json_data = requests.get(url)
     iscached =json_data.from_cache
-
+    #
     json_data = json_data.json()
-    if not (iscached):
-        timestamps.append(time)
-
-    else:
-        #print(timestamps)
-        print('1')
+    # if not (iscached):
+    #     timestamps.append(time)
+    #
+    # else:
+    #     #print(timestamps)
+    #     print('1')
 
 
 
