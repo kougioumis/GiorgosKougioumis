@@ -151,10 +151,10 @@ if __name__ == '__main__':
     time = datetime.datetime.now()
     time = time.strftime("%c")
 
-    while(1):
-        search_for_people()
+    #while(1):
+    search_for_people()
 
-        #requests_cache.clear()
+    requests_cache.clear()
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
 
 
