@@ -1,29 +1,26 @@
 import requests
-import requests_cache
-import urllib.parse
-import datetime
 import re
-import main
-##if the --world param is used we call this
+
+
 def get_home_world(results,i):
 
 
     url = results[i]['homeworld']
-    print("------------")
-    print("Homeworld")
-    print("------------")
+    # print("------------")
+    # print("Homeworld")
+    # print("------------")
 
     pagenum = re.findall("[-+]?[.]?[\d]+(?:,\d\d\d)*[\.]?\d*(?:[eE][-+]?\d+)?", url) #gives the page number
 
     homeworlRequestcahce = requests.get(url)
     homeworlRequest = homeworlRequestcahce.json()
 
-    main.cachetrack(int(pagenum[0]), 2)                                      #request - cachingtraking
+    #main.cachetrack(int(pagenum[0]), 2)                                      #request - cachingtraking
 
 
 
-    print("Name: " + homeworlRequest['name'])
-    print("Population: " + homeworlRequest['population'])
+    # print("Name: " + homeworlRequest['name'])
+    # print("Population: " + homeworlRequest['population'])
 
 
     if (homeworlRequest['orbital_period']!='unknown'):
@@ -34,11 +31,11 @@ def get_home_world(results,i):
             days = int(homeworlRequest['rotation_period']) / 24
             days = round(days, 2)                                        #here for error exception
 
-            print(f"On " + homeworlRequest['name'] + ", 1 year on Earth is ", years, "years and 1 day", days, "days")
-
+            #print(f"On " + homeworlRequest['name'] + ", 1 year on Earth is ", years, "years and 1 day", days, "days")
+            return ("Name: " + homeworlRequest['name']),("Population: " + homeworlRequest['population']),('On ' + homeworlRequest['name'] + ', 1 year on Earth is '+ str(years)+ " years and 1 day "+ str(days)+ "days")
     else:
         print(f"This system Unkown to me is")   #the exception
-
+        #return (f"This system Unkown to me is")
 
 
 
