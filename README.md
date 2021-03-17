@@ -1,4 +1,4 @@
-# A Star Wars API <h1>
-### Python 3.9 vevn developed in pycharm <h2> 
-###### Install requirements and just run main.py withoun parameters <p>
-###### You get a window open and you can doevrithing asked over there <p> 
+# A Star Wars API 
+### Python 3.9 vevn developed in pycharm 
+###### Install requirements and just run main.py without parameters 
+###### You get a window open, and you can do everything described over there 
