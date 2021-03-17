@@ -1,10 +1,7 @@
 
 
 import requests_cache
-
 import datetime
-
-
 import grafics
 
 
