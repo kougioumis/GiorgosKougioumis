@@ -58,7 +58,7 @@ def search_for_people(name,world):
                             # print("------------")
                             # print("This entry is cached",time[0])
                             exitvar[8] = ("------------")
-                            exitvar[9] = ("This entry is cached "+time[0])
+                            exitvar[9] = ("This entry is cached "+time[pageNun])
                             return exitvar
                 elif (iscached):
 
