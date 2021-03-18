@@ -7,4 +7,3 @@
 ###### -> python main.py -c (clears the cache)
 ###### -> python main.py search "name" (executes the programme with no gui and searches for the name in the name field)
 ###### -> python main.py search "name" (executes the programme with no gui and searches for the name in the name field, and the homeworld of its origin)
-###### You get a window open, and you can do everything described over there 
