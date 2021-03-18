@@ -1,9 +1,9 @@
 import main
-import get_home_world
+import homeworld
 import numpy as np
 import urllib.parse
 import requests
-import get_home_world
+import homeworld
 import os.path
 import datetime
 import requests_cache
@@ -14,105 +14,111 @@ timestampsfinal = np.array(0)
 
 def search_for_people(name,world):
 
-
+    ## initialization propably can be removed but helps to get the pagenum for the loop ahead
     exitvar = [0,0,0,0,0,0,0,0,0,0]
     haveYouFountAnything = 0
     value=name
-    people,iscached,time = get_page(1)
-    pageNun = get_number_of_pages(people) #propably can be removed
+    people,cached,time = get_page(1)
+    pageNun = get_number_of_pages(people)
 
 
-
+    ## starts loading pages of the swapi
     for j in range (1,pageNun):
 
         people,iscached,time = get_page(j)
         results = people['results']
 
-
+        #looks in the entries of every page for a much is the given string
         for i in range (0,len(results)):
             if value.casefold() in results[i]['name'].casefold():
 
-                # print()
-                # print("Name: " + results[i]['name'])
-                # print("Height: " + results[i]['height'])
-                # print("Mass: " + results[i]['mass'])
-                # print("Birth Year: " + results[i]['birth_year'])
 
+                ## if a mach is found starts building the output var
 
                 exitvar[0] = ("Name: " + results[i]['name'])
                 exitvar[1] = ("Height: " + results[i]['height'])
                 exitvar[2] = ("Mass: " + results[i]['mass'])
                 exitvar[3] = ("Birth Year: " + results[i]['birth_year'])
-                exitvar[4] = ["------------"]
-                #print(exitvar)
-
-                #print("Birth Year: " + results[i]['created'])
+                exitvar[4] = ("------------")
 
                 haveYouFountAnything = 1
+
+
+                ## if the --world parameter is used or the world box is checked
                 if (world):
-                    exitvar[5],exitvar[6],exitvar[7] = get_home_world.get_home_world(results,i)
-                    #print(exitvar)
-                    if (iscached):
-                        if(len(time)>1):
-                            #
-                            # print("------------")
-                            # print("This entry is cached",time[0])
-                            exitvar[8] = ("------------")
-                            exitvar[9] = ("This entry is cached "+time[0])
-                            return exitvar
-                elif (iscached):
-
-                    # print("------------")
-                    # print("This entry is cached", time[0])
+                    exitvar[5],exitvar[6],exitvar[7] = homeworld.get(results,i)
+                    exitvar[8] = ("------------")
 
 
-                    exitvar[5] = ("This entry is cached " + time[0])
-                    return exitvar
+                    ## if the page is taken from the cache
+                    if (cached):
+                        for i in range (0,len(time)):
+                            if (time[i] == j):
+                                exitvar[9] = ("Cached "+time[i-1])
+                                break
+                    else:
+                        return exitvar
 
+
+
+                else:
+                    ## if the page is taken from the cache
+                    if (cached):
+                        for i in range(0, len(time)):
+                            if (time[i] == j):
+                                exitvar[5] = ("Cached "+time[i-1])
+                                break
+                            else:
+                                exitvar[5] = ("Cached " + time[0])
+                        exitvar[6] = ("------------")
+                        return exitvar
+                    else:
+                        return exitvar
+    ## case nothing is found print error message
     if (haveYouFountAnything==0):
-       #print("The force is not strong in you")
-       exitvar[0] = ("The force is not strong in you")
-
+       exitvar[0] = ("The force is not strong within you")
 
     return exitvar
 
 def get_page(page_num):
 
+    ## time parameter to be used as timestamps
     time = datetime.datetime.now()
-    time = time.strftime("%c")
+    time = time.strftime("%y-%m-%d %X.%f")
 
+
+    ## request and responce
     endpoint = "https://swapi.dev/api/people/?"
-
-
-
     type = 'json'
-
     url = endpoint + urllib.parse.urlencode({"format": type, "page": page_num})
 
-
-    #requests_cache.install_cache('demo_cache')
-
-
     json_data = requests.get(url)
-    iscached =json_data.from_cache
-    requests_cache.core
+    cached=json_data.from_cache
     json_data = json_data.json()
-    if not (iscached):
-        timestamps.append(time)
+
+
+    ### code for clearing the cache
+    if (page_num==-100):
+        timestamps.clear()
+        return json_data, cached,timestamps
 
     else:
-        #print(timestamps)
         timestamps.append(time)
-        #print('1')
+        timestamps.append(page_num)
+
+        # gets the first time a page was writen in the db
+        for i in range (1,len(timestamps),2):
+            for j in range (i+2,len(timestamps),2):
+                if (timestamps[i]==timestamps[j]):
+                    timestamps.pop( j-1 )
+                    timestamps.pop( j-1 )
+
+    return json_data, cached, timestamps
 
 
 
-    return json_data, iscached,timestamps
 
-
-
-
-#calculates the number of pages for the people json so we can know how deep we look and handle errors
+#calculates the number of pages for the people json
 def get_number_of_pages(peoplejson):
 
     if peoplejson.get('count')%10>1:
@@ -122,6 +128,7 @@ def get_number_of_pages(peoplejson):
     return (numberOfPages)
 
 
-DEFAULT_PATH = os.path.join(os.path.dirname(__file__), 'demo_cache.sqlite3')
+
+
 
 
