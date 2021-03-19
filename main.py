@@ -29,7 +29,7 @@ if __name__ == '__main__':
         requests_cache.clear()
 
     elif(len(sys.argv)==2):
-        if(sys.argv[1]=='gui'):
+        if(sys.argv[1]=='-gui'):
             grafics.gui()
             requests_cache.clear()
 
